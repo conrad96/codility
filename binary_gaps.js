@@ -18,51 +18,40 @@ N is an integer within the range [1..2,147,483,647].
 */
 
 //return the number of binary gaps of an integer
-function solution(N)
-{
-    //check for valid integer
-    if(N > 0 && N <= 2147483647)
+function binaryGaps(binary, gaps)
+{   
+    //get index of first 1
+    let first = binary.indexOf('1');
+
+    if(first > -1)
     {
-        //convert N to binary representation
-        let binary = N.toString(2);
+         //slice array from first 1
+        let firstArray = binary.slice(first + 1);
 
-        //if no 0 is in binary string return 0
-        if(binary.indexOf('0') === -1) return 0;
+        //get index of second 1
+        let second = firstArray.indexOf('1');
 
-        //get the number of 0's between 1's
-        let onesIndexes = [];
-        for(i = 0; i < binary.length; i++)
+        if(second > 0)
         {
-            //get index of 1 then make substr
-           if(binary[i] == '1') onesIndexes.push(i);           
-        }
-        
-        //get substrings from 1's indexes
-        let result = [];
-        if(onesIndexes.length > 0)
-        {            
-            for(i = 0; i < onesIndexes.length; i++)
-            {
-                if(binary[i] === "0")
-                {
-                    result.push(binary.substr(i, onesIndexes[i]));
-                }                
-            }
-        }
-        console.log(result);
-        //get the longest bin gap
-        let longest = 0;
-        for(i = 0; i < result.length; i++)
-        {
-            if(result[i].length > longest)
-            {
-                longest = result[i].length;
-            }
-        }
-        return longest;
-    }else {
-        return 0;
+            //push second idnex to gaps
+            gaps.push(second);
+        }            
+
+        return binaryGaps(firstArray.slice(second + 1), gaps);
     }
+
+    //return max value in gaps array
+    return (gaps.length > 0)?  Math.max.apply(Math, gaps) : 0;
 }
 
-solution(1041);
+function solution (N)
+{
+    if(N === parseInt(N, 10) && N >= 1 && N <= 2147483647)
+    {
+        const binary = N.toString(2);
+        const binArray = binary.split('');
+
+        return binaryGaps(binArray, []);        
+    }
+    return 0;
+}
