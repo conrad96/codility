@@ -23,7 +23,7 @@ book.prototype.getAvailability = function()
         return 'out of stock';
     }else if(this.numOfCopies < 10)
     {
-        return 'low stock';            
+        return 'low stock';
     }
     return 'in stock';
 }
